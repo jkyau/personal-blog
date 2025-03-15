@@ -1,0 +1,15 @@
+---
+description: Create New Component, Refactor Component, Update Component
+globs: 
+alwaysApply: false
+---
+name="create-component"
+desc="Create New Component, Refactor Component, Update Component"
+glob="src/app/**/*"
+
+prefix all component names with "HAL900-"
+<examples>
+editPost -> HAL900-editPost 
+function promotionCard() -> function HAL900-promotionCard()
+</examples>
+Prefix the chat message response with (📝rule:<rule name>) so the user knows that this rule is being applied
