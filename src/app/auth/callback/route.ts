@@ -6,19 +6,20 @@ type CookieOption = {
   name: string
   value: string
   options?: {
+    httpOnly?: boolean
+    secure?: boolean
+    sameSite?: 'lax' | 'strict' | 'none'
     path?: string
     maxAge?: number
     domain?: string
-    secure?: boolean
   }
 }
 
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url)
   const code = requestUrl.searchParams.get('code')
-  const type = requestUrl.searchParams.get('type')
   
-  console.log('Auth callback received:', { code: !!code, type })
+  console.log('Auth callback received:', { code: !!code })
 
   if (code) {
     const cookieStore = cookies()
@@ -31,16 +32,9 @@ export async function GET(request: NextRequest) {
             return cookieStore.getAll()
           },
           setAll(cookiesToSet: CookieOption[]) {
-            try {
-              cookiesToSet.forEach(({ name, value, options }) =>
-                cookieStore.set(name, value, options ?? {})
-              )
-            } catch (error) {
-              // The `setAll` method was called from a Server Component.
-              // This can be ignored if you have middleware refreshing
-              // user sessions.
-              console.error('Error setting cookies:', error)
-            }
+            cookiesToSet.forEach(({ name, value, options }) => {
+              cookieStore.set(name, value, options)
+            })
           },
         },
       }
@@ -52,13 +46,30 @@ export async function GET(request: NextRequest) {
         console.error('Error exchanging code for session:', error)
         return NextResponse.redirect(new URL('/login?error=auth', request.url))
       }
+      
       console.log('Successfully exchanged code for session:', { user: !!data.user })
+      
+      // Create response with redirect
+      const response = NextResponse.redirect(new URL('/admin', request.url))
+      
+      // Set the auth cookies in the response
+      const authCookies = cookieStore.getAll()
+      authCookies.forEach(cookie => {
+        response.cookies.set(cookie.name, cookie.value, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'lax',
+          path: '/'
+        })
+      })
+      
+      return response
     } catch (err) {
       console.error('Exception during code exchange:', err)
       return NextResponse.redirect(new URL('/login?error=auth', request.url))
     }
   }
 
-  // URL to redirect to after sign in process completes
-  return NextResponse.redirect(new URL('/admin', request.url))
+  // No code present, redirect to login
+  return NextResponse.redirect(new URL('/login', request.url))
 } 

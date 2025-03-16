@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import ResendVerification from '@/components/ResendVerification'
+import LoginForm from '@/components/LoginForm'
 
 export default async function Login() {
   const supabase = await createClient()
@@ -34,43 +34,8 @@ export default async function Login() {
         <div className="max-w-3xl mx-auto">
           <div className="max-w-sm mx-auto">
             <h1 className="text-2xl font-semibold mb-6">Login</h1>
-            <form action="/auth/sign-in" method="post" className="space-y-4">
-              <div>
-                <label htmlFor="email" className="block text-sm text-gray-600 mb-1">Email</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  required
-                  className="w-full p-2 text-base border border-black/5 focus:outline-none focus:border-black/10 transition-colors"
-                />
-              </div>
-              <div>
-                <label htmlFor="password" className="block text-sm text-gray-600 mb-1">Password</label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  required
-                  className="w-full p-2 text-base border border-black/5 focus:outline-none focus:border-black/10 transition-colors"
-                />
-              </div>
-              <button
-                type="submit"
-                className="w-full bg-black text-white p-2 text-base hover:bg-gray-800 transition-colors"
-              >
-                Sign In
-              </button>
-            </form>
-            <p className="mt-4 text-sm text-gray-600 text-center">
-              Don't have an account?{' '}
-              <Link href="/signup" className="text-black hover:text-gray-600 transition-colors">
-                Sign up
-              </Link>
-            </p>
+            <LoginForm />
           </div>
-
-          <ResendVerification />
         </div>
       </main>
 

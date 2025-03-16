@@ -1,0 +1,125 @@
+# User Interface Design Document
+
+## Design Philosophy
+- Clean, editorial aesthetic with emphasis on typography and whitespace
+- Content-first approach with minimal distractions
+- Subtle depth through gradients and blur effects
+- Balanced mix of serif and sans-serif typography
+
+## Layout Structure
+- Single-column layout optimized for readability
+- Maximum content width of 42rem (672px)
+- Wider header/footer containers (60rem)
+- Fixed header with subtle blur effect
+- Generous vertical spacing between sections
+
+## Core Components
+
+### Header
+- Height: 4.5rem (72px)
+- Background: white/90 with backdrop-blur-[6px]
+- Subtle border: #E6E1D7/80
+- Custom "jkYau" logotype with precise letter positioning
+- Right-aligned navigation items
+
+### Hero Section
+- Subtle gradient background (from-[#E6E1D7]/80 to-[#E6E1D7]/40)
+- Large serif heading (3.25rem)
+- Two-tier description with opacity variation
+- Social links with understated hover effects
+- Rounded corners (rounded-2xl)
+- Comfortable padding (p-12)
+
+### Content Areas
+- Clear section headings (1.5rem)
+- Consistent vertical rhythm
+- Generous whitespace between elements
+- Group hover effects on interactive elements
+- Subtle transitions for all interactions
+
+### Footer
+- Matches header styling
+- Logo and copyright on left
+- RSS link on right
+- Consistent height with header
+
+## Typography System
+
+### Logo Treatment
+- Font: Times New Roman
+- Size: 1.5rem
+- Custom letter spacing and positioning
+- Precisely rotated 'a' (-rotate-12)
+- Origin point: 25% 40%
+
+### Content Typography
+- **Headers:**
+  - Hero: 3.25rem, serif
+  - Section: 1.5rem, sans-serif
+  - Post titles: 1.75rem, serif
+  
+- **Body Text:**
+  - Primary: 1.125rem, serif
+  - Meta: 15px, sans-serif
+  - Links: 15px, sans-serif
+
+## Color Palette
+- **Backgrounds:**
+  - Main: #FAF9F7 (warm white)
+  - Header/Footer: white/90 with blur
+  - Feature: #E6E1D7/80 to #E6E1D7/40 gradient
+  
+- **Text:**
+  - Primary: #1A1919
+  - Secondary: #666666
+  - Hover states: Opacity variations
+
+## Spacing System
+- **Vertical:**
+  - Page top: pt-24
+  - Page bottom: pb-16
+  - Section spacing: mb-20
+  - Content gaps: space-y-10
+  
+- **Horizontal:**
+  - Container: px-6
+  - Element gaps: gap-5, gap-6, gap-8
+
+## Interactive Elements
+- **Links:**
+  - Subtle underlines on hover
+  - Color transitions (duration-200)
+  - Consistent hover states
+  
+- **Groups:**
+  - Smooth opacity changes
+  - Text color transitions
+  - No harsh state changes
+
+## Responsive Design
+- **Desktop:**
+  - Fixed header
+  - Optimal reading width
+  - Full feature set
+  
+- **Mobile:**
+  - Preserved typography scale
+  - Adjusted padding
+  - Maintained hierarchy
+  - Stack layout preservation
+
+## Performance
+- Minimal CSS usage
+- No heavy animations
+- Efficient blur effects
+- System fonts
+- Optimized transitions
+
+## Accessibility
+- High contrast text
+- Clear visual hierarchy
+- Semantic HTML
+- Proper heading structure
+- Adequate text sizing
+- Consistent navigation patterns
+- Hover/focus states 

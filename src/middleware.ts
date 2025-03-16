@@ -2,24 +2,13 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 // Define protected routes that require authentication
-const protectedRoutes = ['/dashboard', '/settings', '/profile']
-
-type CookieOption = {
-  name: string
-  value: string
-  options?: {
-    path?: string
-    maxAge?: number
-    domain?: string
-    secure?: boolean
-  }
-}
+const protectedRoutes = ['/dashboard', '/settings', '/profile', '/admin']
 
 export async function middleware(request: NextRequest) {
+  console.log('🔍 Middleware executing for path:', request.nextUrl.pathname)
+
   let response = NextResponse.next({
-    request: {
-      headers: request.headers,
-    },
+    request,
   })
 
   const supabase = createServerClient(
@@ -30,57 +19,65 @@ export async function middleware(request: NextRequest) {
         getAll() {
           return request.cookies.getAll()
         },
-        setAll(cookiesToSet: CookieOption[]) {
+        setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value, options }) => {
-            response.cookies.set(name, value, options ?? {})
+            request.cookies.set(name, value)
+            response.cookies.set(name, value, options)
           })
         },
       },
     }
   )
 
-  // Do not run code between createServerClient and
-  // supabase.auth.getUser(). A simple mistake could make it very hard to debug
-  // issues with users being randomly logged out.
   const {
     data: { user },
   } = await supabase.auth.getUser()
+  
+  console.log('👤 Current user state:', user ? 'Authenticated' : 'Not authenticated')
 
-  // Check if the request is for admin routes
-  const isAdminRoute = request.nextUrl.pathname.startsWith('/admin')
-  const isProtectedRoute = protectedRoutes.some(route => request.nextUrl.pathname.startsWith(route))
-  const isAuthRoute = request.nextUrl.pathname.startsWith('/login') || 
-                     request.nextUrl.pathname.startsWith('/signup') || 
-                     request.nextUrl.pathname.startsWith('/auth')
-
-  // Handle admin routes
-  if (isAdminRoute) {
-    if (!user) {
-      // If no user, redirect to login
-      const redirectUrl = new URL('/login', request.url)
-      redirectUrl.searchParams.set('redirect', request.nextUrl.pathname)
-      return NextResponse.redirect(redirectUrl)
-    }
-
-    // Check if user has admin role
-    const { data: userRole } = await supabase
-      .from('user_roles')
-      .select('role')
-      .eq('user_id', user.id)
-      .single()
-
-    if (!userRole || userRole.role !== 'admin') {
-      // If not admin, redirect to unauthorized page
-      return NextResponse.redirect(new URL('/unauthorized', request.url))
-    }
-  }
-  // Handle other protected routes
-  else if (isProtectedRoute && !user && !isAuthRoute) {
+  // If user is not logged in and trying to access a protected route
+  if (!user && request.nextUrl.pathname.startsWith('/admin')) {
+    console.log('🚫 Unauthorized access attempt to admin - redirecting to login')
     const redirectUrl = new URL('/login', request.url)
-    redirectUrl.searchParams.set('redirect', request.nextUrl.pathname)
-    return NextResponse.redirect(redirectUrl)
+    const redirectResponse = NextResponse.redirect(redirectUrl)
+    
+    // Copy all cookies from the response to the redirect
+    response.cookies.getAll().forEach(cookie => {
+      redirectResponse.cookies.set(cookie.name, cookie.value, {
+        path: cookie.path,
+        domain: cookie.domain,
+        maxAge: cookie.maxAge,
+        secure: cookie.secure,
+        httpOnly: cookie.httpOnly,
+        sameSite: cookie.sameSite,
+      })
+    })
+    
+    return redirectResponse
   }
 
+  // If user is logged in and trying to access login page
+  if (user && request.nextUrl.pathname.startsWith('/login')) {
+    console.log('✅ Authenticated user at login - redirecting to admin')
+    const redirectUrl = new URL('/admin', request.url)
+    const redirectResponse = NextResponse.redirect(redirectUrl)
+    
+    // Copy all cookies from the response to the redirect
+    response.cookies.getAll().forEach(cookie => {
+      redirectResponse.cookies.set(cookie.name, cookie.value, {
+        path: cookie.path,
+        domain: cookie.domain,
+        maxAge: cookie.maxAge,
+        secure: cookie.secure,
+        httpOnly: cookie.httpOnly,
+        sameSite: cookie.sameSite,
+      })
+    })
+    
+    return redirectResponse
+  }
+
+  console.log('✨ Middleware complete - continuing with request')
   return response
 }
 

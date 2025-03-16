@@ -27,21 +27,10 @@ const formatDate = (date: Date) => {
 export default async function AdminPage() {
   const supabase = await createClient();
 
-  // Check if user is authenticated and has admin role
+  // Check if user is authenticated
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
     redirect('/login');
-  }
-
-  // Verify admin role
-  const { data: userRole } = await supabase
-    .from('user_roles')
-    .select('role')
-    .eq('user_id', user.id)
-    .single();
-
-  if (!userRole || userRole.role !== 'admin') {
-    redirect('/unauthorized');
   }
 
   return (
