@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import ResendVerification from '@/components/ResendVerification'
 
 export default async function Login() {
   const supabase = await createClient()
@@ -68,6 +69,8 @@ export default async function Login() {
               </Link>
             </p>
           </div>
+
+          <ResendVerification />
         </div>
       </main>
 
