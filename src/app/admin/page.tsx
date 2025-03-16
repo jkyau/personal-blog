@@ -123,6 +123,12 @@ export default async function AdminPage() {
               ))}
             </div>
           </div>
+
+          <div className="flex gap-4">
+            <Link href="/" className="text-xs tracking-wide hover:opacity-50 transition-opacity">
+              Home
+            </Link>
+          </div>
         </div>
       </main>
     </div>

@@ -30,9 +30,6 @@ export default function Home() {
             </span>
           </Link>
           <nav className="flex items-center gap-6">
-            <Link href="/archive" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
-              Archive
-            </Link>
             <Link href="/admin" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
               Admin
             </Link>

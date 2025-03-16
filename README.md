@@ -1,39 +1,23 @@
-# AI Agent First Blogging Platform
+# Personal Blog
 
-A minimalist, modern blogging platform with integrated AI assistance for content creation and optimization.
+A minimalist personal blog built with Next.js, TypeScript, and Supabase.
 
 ## Features
 
-- **Minimalist Design**: Clean, focused reading experience that puts content first
-- **AI-Powered Content**: Leverage AI to enhance your blogging workflow and content quality
-- **SEO Optimization**: AI tools analyze your content and suggest improvements for better search engine visibility
-- **Modern Stack**: Built with Next.js, TypeScript, and Tailwind CSS
-
-## Pages
-
-- **Journal (Homepage)**: Main blog listing with a clean, minimal design
-- **Archive**: Chronological archive of all blog posts organized by month
-- **Blog Posts**: Individual blog post pages with a focus on readability
-- **Admin Dashboard**: Content management interface with AI assistance
-
-## Getting Started
-
-```bash
-# Install dependencies
-npm install
-
-# Run the development server
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Homepage**: Clean, minimal list of blog posts
+- **Blog Posts**: Typography-focused article pages
+- **Admin**: Secure admin interface for content management
+- **Authentication**: Supabase authentication
+- **Database**: Supabase PostgreSQL database
+- **Markdown**: Full markdown support for blog posts
 
 ## Tech Stack
 
-- **Framework**: Next.js 14
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **Typography**: @tailwindcss/typography
+- Next.js 14 (App Router)
+- TypeScript
+- Tailwind CSS
+- Supabase
+- Markdown
 
 ## Project Structure
 
@@ -42,16 +26,44 @@ src/
 ├── app/
 │   ├── admin/
 │   │   └── page.tsx         # Admin dashboard
-│   ├── archive/
-│   │   └── page.tsx         # Archive page
+│   ├── auth/
+│   │   └── callback/        # Auth callback handling
 │   ├── blog/
 │   │   └── [id]/
-│   │       └── page.tsx     # Individual blog post page
-│   ├── globals.css          # Global styles
-│   ├── layout.tsx           # Root layout
-│   └── page.tsx             # Homepage (Journal)
+│   │       └── page.tsx     # Blog post page
+│   ├── api/                 # API routes
+│   └── page.tsx             # Homepage
+├── components/              # React components
+├── lib/                     # Utility functions
+└── types/                   # TypeScript types
 ```
+
+## Getting Started
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Set up environment variables:
+   ```bash
+   cp .env.example .env.local
+   ```
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+## Development
+
+- **Code Style**: Uses ESLint and Prettier
+- **Git Flow**: Feature branches and pull requests
+- **Testing**: Jest and React Testing Library
+
+## Deployment
+
+The site is deployed on Vercel with automatic deployments from the main branch.
 
 ## License
 
-This project is open source and available under the [MIT License](LICENSE). 
+MIT 

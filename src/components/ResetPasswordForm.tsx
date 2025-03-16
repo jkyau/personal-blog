@@ -104,9 +104,6 @@ export default function ResetPasswordForm() {
             <Link href="/" className="hover:opacity-70 transition-opacity text-xs uppercase tracking-widest">
               Journal
             </Link>
-            <Link href="/archive" className="hover:opacity-70 transition-opacity text-xs uppercase tracking-widest">
-              Archive
-            </Link>
           </nav>
         </div>
       </header>
@@ -202,6 +199,12 @@ export default function ResetPasswordForm() {
                 Login
               </Link>
             </p>
+          </div>
+
+          <div className="flex justify-between items-center mt-4">
+            <Link href="/" className="hover:opacity-70 transition-opacity text-xs uppercase tracking-widest">
+              Home
+            </Link>
           </div>
         </div>
       </main>
