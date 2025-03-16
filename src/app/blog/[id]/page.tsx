@@ -121,7 +121,7 @@ export default function BlogPost({ params }: { params: { id: string } }) {
   };
   
   return (
-    <div className="min-h-screen bg-white text-black font-['Times_New_Roman']">
+    <div className="min-h-screen bg-white text-black font-['Times_New_Roman'] flex flex-col">
       <header className="fixed top-0 inset-x-0 bg-white border-b border-black/5 z-50">
         <div className="max-w-3xl mx-auto h-10 flex items-center justify-between">
           <Link href="/" className="text-lg tracking-wider">
@@ -142,7 +142,7 @@ export default function BlogPost({ params }: { params: { id: string } }) {
         </div>
       </header>
       
-      <main className="pt-16 px-4 pb-16">
+      <main className="pt-16 px-4 pb-16 flex-1">
         <article className="max-w-3xl mx-auto">
           <Link href="/" className="text-sm text-gray-600 hover:text-gray-900 transition-colors mb-3 inline-block">
             ← Back
@@ -168,7 +168,7 @@ export default function BlogPost({ params }: { params: { id: string } }) {
         </article>
       </main>
       
-      <footer className="fixed bottom-0 inset-x-0 bg-white border-t border-black/5">
+      <footer className="bg-white border-t border-black/5">
         <div className="max-w-3xl mx-auto h-10 flex items-center">
           <div className="text-lg tracking-wider">
             <span className="tracking-tight">jk</span>

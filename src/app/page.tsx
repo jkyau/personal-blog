@@ -19,7 +19,7 @@ const posts = [
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-white text-black font-['Times_New_Roman']">
+    <div className="min-h-screen bg-white text-black font-['Times_New_Roman'] flex flex-col">
       <header className="fixed top-0 inset-x-0 bg-white border-b border-black/5 z-50">
         <div className="max-w-3xl mx-auto h-10 flex items-center justify-between">
           <Link href="/" className="text-lg tracking-wider">
@@ -40,7 +40,7 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="pt-16 px-4 pb-16">
+      <main className="pt-16 px-4 pb-16 flex-1">
         <div className="max-w-3xl mx-auto">
           <div className="space-y-8">
             {posts.map((post) => (
@@ -62,7 +62,7 @@ export default function Home() {
         </div>
       </main>
 
-      <footer className="fixed bottom-0 inset-x-0 bg-white border-t border-black/5">
+      <footer className="bg-white border-t border-black/5">
         <div className="max-w-3xl mx-auto h-10 flex items-center">
           <div className="text-lg tracking-wider">
             <span className="tracking-tight">jk</span>
