@@ -14,7 +14,45 @@ interface BlogPost {
 // Mock data for blog posts
 const blogPosts: BlogPost[] = [
   {
-    id: '1',
+    id: '4',
+    title: 'Anthropic AI Index Review',
+    date: '2024-03-23',
+    author: 'Jason Yau',
+    readTime: '3 min read',
+    categories: ['AI', 'Research', 'Analysis'],
+    content: `
+Anthropic recently introduced their new "Anthropic Economic Index," an intriguing effort aimed at tracking and understanding how AI is reshaping our labor markets. As someone deeply invested in learning everything possible about artificial intelligence, I found their initial findings particularly compelling.
+
+The Index stands out because it isn't based on forecasts or surveys, but rather real-world data from millions of anonymized conversations on Anthropic's Claude AI platform. They analyzed about a million interactions to map exactly how people are using AI to perform specific occupational tasks.
+
+Here are some highlights that grabbed my attention:
+
+- AI is predominantly augmenting human efforts (57%) rather than outright replacing them (43%).
+- Usage is highest among mid-to-high income roles like computer programmers and data scientists, while significantly lower among the highest- and lowest-paying jobs.
+- AI's integration is selective and task-specific rather than uniformly impacting entire jobs. No occupation has been fully automated yet, but the data reveals a substantial and growing role for AI.
+
+Anthropic's approach, focusing on real-world interactions rather than forecasts or surveys, gives us direct insight into how AI adoption is practically unfolding right now.
+
+I'll be closely watching this space and sharing insights as I deepen my own AI journey. This Index seems poised to become a vital resource for understanding the complex, real-world impacts of artificial intelligence.`
+  },
+  {
+    id: '3',
+    title: 'AI Learning Journey Begins',
+    date: '2024-03-22',
+    author: 'Jason Yau',
+    readTime: '2 min read',
+    categories: ['AI', 'Learning', 'Personal'],
+    content: `
+I've always believed that the only way to truly master something is to immerse yourself completely. Right now, that something for me is artificial intelligence.
+
+AI isn't just a passing curiosity—it's rapidly becoming the defining technology of our generation. I've made a decision to dive headfirst into this fascinating world, with laser focus on exploring everything from foundational machine learning concepts to the latest advancements in generative AI and beyond.
+
+This blog will be my digital notebook, a transparent place to document my journey. I'll share links, detailed notes, key insights, breakthroughs, failures, and every resource I discover along the way. My goal is simple: to become deeply knowledgeable about AI, applying what I learn to create meaningful impact.
+
+Consider this post my first step—a commitment to learning openly and relentlessly. Let's see where this journey takes us.`
+  },
+  {
+    id: '2',
     title: 'The Evolution of AI-Powered Content Creation',
     date: '2024-03-20',
     author: 'Jason Yau',
@@ -67,20 +105,13 @@ The key to successful AI-powered content creation lies in finding the perfect ba
 Remember: The best content comes from combining AI's analytical capabilities with human creativity and emotional intelligence.`
   },
   {
-    id: '2',
+    id: '1',
     title: 'Building a Modern Digital Writing Experience',
-    date: '2024-03-21',
+    date: '2024-03-19',
     author: 'Jason Yau',
     readTime: '3 min read',
+    categories: ['Design', 'Development'],
     content: 'Content for the second blog post...'
-  },
-  {
-    id: '3',
-    title: 'Optimizing Your Blog for Search Engines',
-    date: '2023-09-28',
-    author: 'Jason Yau',
-    readTime: '6 min read',
-    content: 'Content for the third blog post...'
   }
 ];
 
@@ -124,18 +155,18 @@ export default function BlogPost({ params }: { params: { id: string } }) {
   
   return (
     <div className="min-h-screen bg-[#FAF9F7] text-[#1A1919] flex flex-col">
-      <header className="fixed top-0 inset-x-0 bg-white/80 backdrop-blur-sm border-b border-[#E6E1D7] z-50">
+      <header className="fixed top-0 inset-x-0 bg-white/90 backdrop-blur-[6px] border-b border-[#E6E1D7]/80 z-50">
         <div className="w-full max-w-screen-xl mx-auto px-6">
-          <div className="max-w-[60rem] mx-auto h-16 flex items-center justify-between">
-            <Link href="/" className="text-[1.375rem] font-['Times_New_Roman'] tracking-tight hover:text-[#666666] transition-colors">
+          <div className="max-w-[60rem] mx-auto h-14 flex items-center justify-between">
+            <Link href="/" className="text-[1.375rem] font-['Times_New_Roman'] tracking-tight hover:text-[#666666] transition-colors duration-200">
               <span className="tracking-tight">jk</span>
-              <span className="tracking-tighter">Y</span>
+              <span className="tracking-tighter relative top-[0.5px]">Y</span>
               <span className="tracking-tight">
-                <span className="inline-block transform -rotate-12 mx-[0.5px]">a</span>u
+                <span className="inline-block transform -rotate-12 origin-[25%_40%] translate-y-[0.5px] -translate-x-[1px] mx-[0.5px]">a</span>u
               </span>
             </Link>
             <nav className="flex items-center gap-8">
-              <Link href="/admin" className="text-[15px] font-sans text-[#666666] hover:text-[#1A1919] transition-colors">
+              <Link href="/admin" className="text-[15px] font-sans text-[#666666] hover:text-[#1A1919] transition-colors duration-200">
                 Admin
               </Link>
             </nav>
@@ -143,7 +174,7 @@ export default function BlogPost({ params }: { params: { id: string } }) {
         </div>
       </header>
       
-      <main className="flex-1 pt-24 pb-16">
+      <main className="flex-1 pt-20 pb-16">
         <div className="w-full max-w-screen-xl mx-auto px-6">
           <article className="max-w-[42rem] mx-auto">
             <div className="mb-16">
@@ -178,21 +209,21 @@ export default function BlogPost({ params }: { params: { id: string } }) {
         </div>
       </main>
       
-      <footer className="bg-white/80 backdrop-blur-sm border-t border-[#E6E1D7]">
+      <footer className="bg-white/90 backdrop-blur-[6px] border-t border-[#E6E1D7]/80">
         <div className="w-full max-w-screen-xl mx-auto px-6">
-          <div className="max-w-[60rem] mx-auto h-16 flex items-center justify-between">
-            <div className="flex items-center gap-4">
+          <div className="max-w-[60rem] mx-auto h-14 flex items-center justify-between">
+            <div className="flex items-center gap-5">
               <div className="text-[1.375rem] font-['Times_New_Roman'] tracking-tight text-[#666666]">
                 <span className="tracking-tight">jk</span>
-                <span className="tracking-tighter">Y</span>
+                <span className="tracking-tighter relative top-[0.5px]">Y</span>
                 <span className="tracking-tight">
-                  <span className="inline-block transform -rotate-12 mx-[0.5px]">a</span>u
+                  <span className="inline-block transform -rotate-12 origin-[25%_40%] translate-y-[0.5px] -translate-x-[1px] mx-[0.5px]">a</span>u
                 </span>
               </div>
-              <div className="text-[15px] font-sans text-[#666666]">© {new Date().getFullYear()}</div>
+              <div className="text-[15px] font-sans text-[#666666] tracking-tight">© {new Date().getFullYear()}</div>
             </div>
             <nav className="flex items-center gap-6">
-              <Link href="/rss" className="text-[15px] font-sans text-[#666666] hover:text-[#1A1919] transition-colors">
+              <Link href="/rss" className="text-[15px] font-sans text-[#666666] hover:text-[#1A1919] transition-colors duration-200">
                 RSS
               </Link>
             </nav>

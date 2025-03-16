@@ -40,14 +40,14 @@ export default function LoginForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-6">
       {error && (
-        <div className="p-3 bg-red-50 text-red-900 text-sm rounded">
+        <div className="p-3 bg-red-50 text-[#E5484D] text-[15px] font-sans rounded-lg border border-red-100">
           {error}
         </div>
       )}
       <div>
-        <label htmlFor="email" className="block text-sm text-gray-600 mb-1">
+        <label htmlFor="email" className="block text-[15px] font-sans text-[#666666] mb-2">
           Email
         </label>
         <input
@@ -56,11 +56,11 @@ export default function LoginForm() {
           name="email"
           required
           disabled={isLoading}
-          className="w-full p-2 text-base border border-black/5 focus:outline-none focus:border-black/10 transition-colors"
+          className="w-full px-4 py-[10px] text-[15px] font-sans bg-white border border-[#E6E1D7] rounded-lg focus:outline-none focus:border-[#1A1919] transition-colors"
         />
       </div>
       <div>
-        <label htmlFor="password" className="block text-sm text-gray-600 mb-1">
+        <label htmlFor="password" className="block text-[15px] font-sans text-[#666666] mb-2">
           Password
         </label>
         <input
@@ -69,13 +69,13 @@ export default function LoginForm() {
           name="password"
           required
           disabled={isLoading}
-          className="w-full p-2 text-base border border-black/5 focus:outline-none focus:border-black/10 transition-colors"
+          className="w-full px-4 py-[10px] text-[15px] font-sans bg-white border border-[#E6E1D7] rounded-lg focus:outline-none focus:border-[#1A1919] transition-colors"
         />
       </div>
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full bg-black text-white p-2 text-base hover:bg-gray-800 transition-colors disabled:opacity-50"
+        className="w-full bg-[#1A1919] text-white font-sans text-[15px] px-6 py-[10px] rounded-lg hover:bg-[#313131] transition-colors duration-200 disabled:opacity-50"
       >
         {isLoading ? 'Signing in...' : 'Sign In'}
       </button>

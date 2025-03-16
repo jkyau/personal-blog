@@ -4,16 +4,28 @@ import { formatDistanceToNow } from 'date-fns';
 // Sample blog posts
 const posts = [
   {
-    id: 1,
+    id: 4,
+    title: 'Anthropic AI Index Review',
+    excerpt: 'Analyzing Anthropic\'s groundbreaking Economic Index that reveals how AI is transforming our labor markets, based on real-world data from millions of Claude interactions.',
+    date: new Date('2024-03-23'),
+  },
+  {
+    id: 3,
+    title: 'AI Learning Journey Begins',
+    excerpt: 'Documenting my deep dive into artificial intelligence—from foundational concepts to cutting-edge developments. A commitment to learning openly and sharing everything along the way.',
+    date: new Date('2024-03-22'),
+  },
+  {
+    id: 2,
     title: 'The Evolution of AI-Powered Content Creation',
     excerpt: 'Exploring how artificial intelligence is transforming the landscape of content creation, from ideation to optimization.',
     date: new Date('2024-03-20'),
   },
   {
-    id: 2,
+    id: 1,
     title: 'Building a Modern Digital Writing Experience',
     excerpt: 'A deep dive into creating intuitive, minimalist interfaces that enhance the writing process.',
-    date: new Date('2024-03-21'),
+    date: new Date('2024-03-19'),
   },
 ];
 
@@ -22,8 +34,8 @@ export default function Home() {
     <div className="min-h-screen bg-[#FAF9F7] text-[#1A1919] flex flex-col">
       <header className="fixed top-0 inset-x-0 bg-white/90 backdrop-blur-[6px] border-b border-[#E6E1D7]/80 z-50">
         <div className="w-full max-w-screen-xl mx-auto px-6">
-          <div className="max-w-[60rem] mx-auto h-[4.5rem] flex items-center justify-between">
-            <Link href="/" className="text-[1.5rem] font-['Times_New_Roman'] tracking-tight hover:text-[#666666] transition-colors duration-200">
+          <div className="max-w-[60rem] mx-auto h-14 flex items-center justify-between">
+            <Link href="/" className="text-[1.375rem] font-['Times_New_Roman'] tracking-tight hover:text-[#666666] transition-colors duration-200">
               <span className="tracking-tight">jk</span>
               <span className="tracking-tighter relative top-[0.5px]">Y</span>
               <span className="tracking-tight">
@@ -39,7 +51,7 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="flex-1 pt-24 pb-16">
+      <main className="flex-1 pt-20 pb-16">
         <div className="w-full max-w-screen-xl mx-auto px-6">
           <section className="max-w-[42rem] mx-auto">
             {/* Hero Section */}
@@ -101,9 +113,9 @@ export default function Home() {
 
       <footer className="bg-white/90 backdrop-blur-[6px] border-t border-[#E6E1D7]/80">
         <div className="w-full max-w-screen-xl mx-auto px-6">
-          <div className="max-w-[60rem] mx-auto h-[4.5rem] flex items-center justify-between">
+          <div className="max-w-[60rem] mx-auto h-14 flex items-center justify-between">
             <div className="flex items-center gap-5">
-              <div className="text-[1.5rem] font-['Times_New_Roman'] tracking-tight text-[#666666]">
+              <div className="text-[1.375rem] font-['Times_New_Roman'] tracking-tight text-[#666666]">
                 <span className="tracking-tight">jk</span>
                 <span className="tracking-tighter relative top-[0.5px]">Y</span>
                 <span className="tracking-tight">
