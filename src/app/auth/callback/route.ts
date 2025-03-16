@@ -2,6 +2,17 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 import { cookies } from 'next/headers'
 
+type CookieOption = {
+  name: string
+  value: string
+  options?: {
+    path?: string
+    maxAge?: number
+    domain?: string
+    secure?: boolean
+  }
+}
+
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url)
   const code = requestUrl.searchParams.get('code')
@@ -13,25 +24,19 @@ export async function GET(request: NextRequest) {
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
       {
         cookies: {
-          get(name: string) {
-            return cookieStore.get(name)?.value
+          getAll() {
+            return cookieStore.getAll()
           },
-          set(name: string, value: string, options: { path?: string; maxAge?: number; domain?: string; secure?: boolean }) {
+          setAll(cookiesToSet: CookieOption[]) {
             try {
-              cookieStore.set({
-                name,
-                value,
-                ...options,
-              })
+              cookiesToSet.forEach(({ name, value, options }) =>
+                cookieStore.set(name, value, options ?? {})
+              )
             } catch (error) {
-              console.error('Error setting cookie:', error)
-            }
-          },
-          remove(name: string, options: { path?: string }) {
-            try {
-              cookieStore.delete(name)
-            } catch (error) {
-              console.error('Error removing cookie:', error)
+              // The `setAll` method was called from a Server Component.
+              // This can be ignored if you have middleware refreshing
+              // user sessions.
+              console.error('Error setting cookies:', error)
             }
           },
         },

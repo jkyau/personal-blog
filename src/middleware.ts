@@ -4,6 +4,17 @@ import { NextResponse, type NextRequest } from 'next/server'
 // Define protected routes that require authentication
 const protectedRoutes = ['/dashboard', '/settings', '/profile']
 
+type CookieOption = {
+  name: string
+  value: string
+  options?: {
+    path?: string
+    maxAge?: number
+    domain?: string
+    secure?: boolean
+  }
+}
+
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({
     request: {
@@ -16,18 +27,13 @@ export async function middleware(request: NextRequest) {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        get(name: string) {
-          return request.cookies.get(name)?.value
+        getAll() {
+          return request.cookies.getAll()
         },
-        set(name: string, value: string, options: { path?: string; maxAge?: number; domain?: string; secure?: boolean }) {
-          response.cookies.set({
-            name,
-            value,
-            ...options,
+        setAll(cookiesToSet: CookieOption[]) {
+          cookiesToSet.forEach(({ name, value, options }) => {
+            response.cookies.set(name, value, options ?? {})
           })
-        },
-        remove(name: string, options: { path?: string }) {
-          response.cookies.delete(name)
         },
       },
     }
