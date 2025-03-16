@@ -12,34 +12,49 @@ export default async function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white text-black font-mono">
-      <header className="py-3 border-b border-gray-200">
-        <div className="container mx-auto px-4 flex justify-between items-center">
-          <Link href="/" className="text-xl tracking-tight font-['Times_New_Roman']">
-            j<span className="mx-[0.5px]">k</span><span className="inline-block mx-[1px]">Y</span><span className="inline-block transform -rotate-12 mx-[0.5px]">a</span><span className="mx-[0.5px]">u</span>
+    <div className="min-h-screen bg-white text-black font-['Times_New_Roman'] flex flex-col">
+      <header className="fixed top-0 inset-x-0 bg-white border-b border-black/5 z-50">
+        <div className="max-w-3xl mx-auto h-10 flex items-center justify-between">
+          <Link href="/" className="text-lg tracking-wider">
+            <span className="tracking-tight">jk</span>
+            <span className="tracking-tighter">Y</span>
+            <span className="tracking-tight">
+              <span className="inline-block transform -rotate-12 mx-[0.5px]">a</span>u
+            </span>
           </Link>
+          <nav className="flex items-center gap-6">
+            <Link href="/admin" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+              Admin
+            </Link>
+          </nav>
         </div>
       </header>
-      
-      <main className="container mx-auto px-4 py-6">
-        <div className="max-w-sm mx-auto">
-          <h1 className="text-xl mb-6">Sign Up</h1>
-          <SignupForm />
-          <p className="mt-4 text-sm text-center">
-            Already have an account?{' '}
-            <Link href="/login" className="text-blue-600 hover:underline">
-              Sign in
-            </Link>
-          </p>
+
+      <main className="pt-16 px-4 pb-16 flex-1">
+        <div className="max-w-3xl mx-auto">
+          <div className="max-w-sm mx-auto">
+            <h1 className="text-2xl font-semibold mb-6">Sign Up</h1>
+            <SignupForm />
+            <p className="mt-4 text-sm text-gray-600 text-center">
+              Already have an account?{' '}
+              <Link href="/login" className="text-black hover:text-gray-600 transition-colors">
+                Sign in
+              </Link>
+            </p>
+          </div>
         </div>
       </main>
-      
-      <footer className="border-t border-gray-200 py-3">
-        <div className="container mx-auto px-4">
-          <div className="text-lg mb-1 font-['Times_New_Roman']">
-            j<span className="mx-[0.5px]">k</span><span className="inline-block mx-[1px]">Y</span><span className="inline-block transform -rotate-12 mx-[0.5px]">a</span><span className="mx-[0.5px]">u</span>
+
+      <footer className="bg-white border-t border-black/5">
+        <div className="max-w-3xl mx-auto h-10 flex items-center">
+          <div className="text-lg tracking-wider">
+            <span className="tracking-tight">jk</span>
+            <span className="tracking-tighter">Y</span>
+            <span className="tracking-tight">
+              <span className="inline-block transform -rotate-12 mx-[0.5px]">a</span>u
+            </span>
           </div>
-          <p className="text-xs text-gray-500">© {new Date().getFullYear()}</p>
+          <div className="text-sm text-gray-600 ml-2">© {new Date().getFullYear()}</div>
         </div>
       </footer>
     </div>
