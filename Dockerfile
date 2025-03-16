@@ -25,8 +25,11 @@ RUN mkdir -p /app/.next/cache/webpack/client-development \
     && chmod -R 777 /app/.next \
     && chmod -R 777 /app/public
 
+# Make start script executable
+RUN chmod +x /app/start.sh
+
 # Expose port
 EXPOSE 3000
 
 # Start the application
-CMD ["npm", "run", "dev"]
+ENTRYPOINT ["/bin/sh", "/app/start.sh"]

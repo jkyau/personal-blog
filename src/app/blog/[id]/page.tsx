@@ -14,47 +14,62 @@ interface BlogPost {
 const blogPosts: BlogPost[] = [
   {
     id: '1',
-    title: 'Getting Started with AI-Powered Blogging',
-    date: '2023-10-15',
+    title: 'The Evolution of AI-Powered Content Creation',
+    date: '2024-03-20',
     author: 'Jason Yau',
-    readTime: '5 min read',
+    readTime: '4 min read',
     content: `
-# Getting Started with AI-Powered Blogging
+In today's rapidly evolving digital landscape, artificial intelligence is fundamentally transforming how we approach content creation. From ideation to optimization, AI tools are becoming indispensable allies in the creative process.
 
-In today's digital landscape, content creation has evolved significantly with the integration of artificial intelligence. AI-powered blogging offers numerous benefits that can enhance your writing process and content quality.
+## The Current State of AI Writing
 
-## Benefits of AI in Blogging
+AI has moved beyond simple grammar checking and spelling corrections. Modern AI systems can now:
 
-### 1. Content Generation
-AI can help generate ideas, outlines, and even draft sections of your blog posts. This can be particularly useful when facing writer's block or when you need to produce content consistently.
+- Generate creative content ideas
+- Analyze audience engagement patterns
+- Optimize content for specific platforms
+- Provide real-time writing suggestions
 
-### 2. SEO Optimization
-AI tools can analyze your content and suggest improvements for better search engine visibility. They can recommend keywords, help optimize meta descriptions, and ensure your content meets SEO best practices.
+## Key Benefits for Content Creators
 
-### 3. Content Analysis
-AI can analyze your existing content to identify patterns, topics that resonate with your audience, and areas for improvement. This data-driven approach allows you to refine your content strategy over time.
+### 1. Enhanced Efficiency
+AI significantly reduces the time spent on research and initial drafts, allowing creators to focus on refining and personalizing content.
 
-### 4. Efficiency
-Perhaps the most significant advantage of AI in blogging is the efficiency it brings to your workflow. Tasks that would typically take hours can be completed in minutes, allowing you to focus on the creative aspects of content creation.
+### 2. Data-Driven Insights
+Content decisions are now backed by:
+- Engagement metrics
+- Audience preferences
+- Performance analytics
+- SEO optimization data
 
-## Getting Started
+### 3. Consistent Quality
+AI helps maintain consistent quality across all content by:
+- Checking tone and style
+- Ensuring readability
+- Maintaining brand voice
+- Flagging potential improvements
 
-To begin incorporating AI into your blogging workflow:
+## The Future of AI Writing
 
-1. Identify the specific areas where AI can add value
-2. Research and select tools that align with your needs
-3. Start with small implementations and gradually expand
-4. Continuously evaluate the impact on your content quality and workflow
+As we look ahead, several trends are emerging:
 
-Remember, AI should enhance your unique voice and perspective, not replace it. The most successful AI-powered blogs maintain a balance between technological assistance and human creativity.
-    `
+1. More sophisticated language models
+2. Better understanding of context
+3. Improved personalization
+4. Enhanced creative capabilities
+
+## Finding the Right Balance
+
+The key to successful AI-powered content creation lies in finding the perfect balance between artificial intelligence and human creativity. AI should enhance, not replace, the human element in writing.
+
+Remember: The best content comes from combining AI's analytical capabilities with human creativity and emotional intelligence.`
   },
   {
     id: '2',
-    title: 'The Future of Content Creation',
-    date: '2023-10-10',
+    title: 'Building a Modern Digital Writing Experience',
+    date: '2024-03-21',
     author: 'Jason Yau',
-    readTime: '4 min read',
+    readTime: '3 min read',
     content: 'Content for the second blog post...'
   },
   {
@@ -70,14 +85,13 @@ Remember, AI should enhance your unique voice and perspective, not replace it. T
 // Format date as YY-MM-DD
 function formatDate(dateString: string) {
   const date = new Date(dateString);
-  const year = date.getFullYear().toString().slice(2); // Get last 2 digits of year
+  const year = date.getFullYear().toString().slice(2);
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
   const day = date.getDate().toString().padStart(2, '0');
   return `${year}-${month}-${day}`;
 }
 
 export default function BlogPost({ params }: { params: { id: string } }) {
-  // Convert params.id to string to ensure proper comparison
   const postId = String(params.id);
   const post = blogPosts.find(p => p.id === postId);
   
@@ -85,68 +99,85 @@ export default function BlogPost({ params }: { params: { id: string } }) {
     notFound();
   }
   
-  // Function to render markdown-like content
   const renderContent = (content: string) => {
     const lines = content.trim().split('\n');
     return lines.map((line, index) => {
       if (line.startsWith('# ')) {
-        return <h1 key={index} className="text-xl font-medium my-4">{line.substring(2)}</h1>;
+        return <h1 key={index} className="text-xl font-semibold mt-3 mb-1.5 leading-snug">{line.substring(2)}</h1>;
       } else if (line.startsWith('## ')) {
-        return <h2 key={index} className="text-lg font-medium my-3">{line.substring(3)}</h2>;
+        return <h2 key={index} className="text-lg font-medium mt-3 mb-1.5 leading-snug">{line.substring(3)}</h2>;
       } else if (line.startsWith('### ')) {
-        return <h3 key={index} className="text-base font-medium my-3">{line.substring(4)}</h3>;
+        return <h3 key={index} className="text-base font-medium mt-2 mb-1 leading-snug">{line.substring(4)}</h3>;
       } else if (line.startsWith('- ')) {
-        return <li key={index} className="ml-6 list-disc my-2">{line.substring(2)}</li>;
+        return <li key={index} className="text-base text-gray-800 ml-4 list-disc mb-0.5 leading-snug">{line.substring(2)}</li>;
       } else if (line.startsWith('1. ')) {
-        return <li key={index} className="ml-6 list-decimal my-2">{line.substring(3)}</li>;
+        return <li key={index} className="text-base text-gray-800 ml-4 list-decimal mb-0.5 leading-snug">{line.substring(3)}</li>;
       } else if (line.trim() === '') {
-        return <div key={index} className="my-3"></div>;
+        return <div key={index} className="h-1.5"></div>;
       } else {
-        return <p key={index} className="my-3 leading-relaxed">{line}</p>;
+        return <p key={index} className="text-base text-gray-800 mb-1.5 leading-snug">{line}</p>;
       }
     });
   };
   
   return (
-    <div className="min-h-screen bg-white text-black font-mono">
-      <header className="py-3 border-b border-gray-200">
-        <div className="container mx-auto px-4 flex justify-between items-center">
-          <Link href="/" className="text-xl tracking-tight font-['Times_New_Roman']">
-            j<span className="mx-[0.5px]">k</span><span className="inline-block mx-[1px]">Y</span><span className="inline-block transform -rotate-12 mx-[0.5px]">a</span><span className="mx-[0.5px]">u</span>
+    <div className="min-h-screen bg-white text-black font-['Times_New_Roman']">
+      <header className="fixed top-0 inset-x-0 bg-white border-b border-black/5 z-50">
+        <div className="max-w-3xl mx-auto h-10 flex items-center justify-between">
+          <Link href="/" className="text-lg tracking-wider">
+            <span className="tracking-tight">jk</span>
+            <span className="tracking-tighter">Y</span>
+            <span className="tracking-tight">
+              <span className="inline-block transform -rotate-12 mx-[0.5px]">a</span>u
+            </span>
           </Link>
-          <nav className="flex gap-4 text-sm tracking-wide">
-            <Link href="/" className="hover:underline">Archive</Link>
-            <Link href="/admin" className="hover:underline">Admin</Link>
+          <nav className="flex items-center gap-6">
+            <Link href="/archive" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+              Archive
+            </Link>
+            <Link href="/admin" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+              Admin
+            </Link>
           </nav>
         </div>
       </header>
       
-      <main className="container mx-auto px-4 py-6">
-        <Link href="/" className="text-gray-500 hover:text-black mb-4 inline-block">
-          ← Back
-        </Link>
-        
-        <article className="max-w-xl ml-0">
-          <div className="text-sm">{formatDate(post.date)}</div>
-          <h1 className="text-xl font-medium mb-2">{post.title}</h1>
-          <div className="flex items-center text-sm text-gray-500 mb-6">
-            <span>{post.author}</span>
-            <span className="mx-2">•</span>
-            <span>{post.readTime}</span>
-          </div>
+      <main className="pt-16 px-4 pb-16">
+        <article className="max-w-3xl mx-auto">
+          <Link href="/" className="text-sm text-gray-600 hover:text-gray-900 transition-colors mb-3 inline-block">
+            ← Back
+          </Link>
           
-          <div className="prose prose-sm max-w-none">
-            {renderContent(post.content)}
+          <div className="mb-6">
+            <header className="mb-4">
+              <time className="text-sm text-gray-600 mb-0.5 block">
+                {formatDate(post.date)}
+              </time>
+              <h1 className="text-2xl font-semibold mb-1 leading-snug">{post.title}</h1>
+              <div className="flex items-center gap-1.5 text-sm text-gray-600">
+                <span>{post.author}</span>
+                <span>•</span>
+                <span>{post.readTime}</span>
+              </div>
+            </header>
+            
+            <div className="[&>h1:first-child]:mt-0 [&>h2:first-child]:mt-0 [&>h3:first-child]:mt-0">
+              {renderContent(post.content)}
+            </div>
           </div>
         </article>
       </main>
       
-      <footer className="border-t border-gray-200 py-3">
-        <div className="container mx-auto px-4">
-          <div className="text-lg mb-1 font-['Times_New_Roman']">
-            j<span className="mx-[0.5px]">k</span><span className="inline-block mx-[1px]">Y</span><span className="inline-block transform -rotate-12 mx-[0.5px]">a</span><span className="mx-[0.5px]">u</span>
+      <footer className="fixed bottom-0 inset-x-0 bg-white border-t border-black/5">
+        <div className="max-w-3xl mx-auto h-10 flex items-center">
+          <div className="text-lg tracking-wider">
+            <span className="tracking-tight">jk</span>
+            <span className="tracking-tighter">Y</span>
+            <span className="tracking-tight">
+              <span className="inline-block transform -rotate-12 mx-[0.5px]">a</span>u
+            </span>
           </div>
-          <p className="text-xs text-gray-500">© {new Date().getFullYear()}</p>
+          <div className="text-sm text-gray-600 ml-2">© {new Date().getFullYear()}</div>
         </div>
       </footer>
     </div>
