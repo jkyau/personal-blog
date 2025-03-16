@@ -5,7 +5,11 @@ import { NextResponse } from 'next/server'
 export async function POST(request: Request) {
   try {
     const { email } = await request.json()
+    console.log('Attempting to resend verification for email:', email)
+    
     const cookieStore = cookies()
+    const origin = request.headers.get('origin')
+    console.log('Request origin:', origin)
 
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -32,17 +36,19 @@ export async function POST(request: Request) {
       type: 'signup',
       email,
       options: {
-        emailRedirectTo: `${request.headers.get('origin')}/auth/callback`,
+        emailRedirectTo: `${origin}/auth/callback`,
       },
     })
 
     if (error) {
+      console.error('Supabase resend error:', error)
       return NextResponse.json(
         { error: error.message },
         { status: 400 }
       )
     }
 
+    console.log('Verification email sent successfully')
     return NextResponse.json(
       { message: 'Verification email sent successfully' },
       { status: 200 }

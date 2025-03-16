@@ -16,6 +16,9 @@ type CookieOption = {
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url)
   const code = requestUrl.searchParams.get('code')
+  const type = requestUrl.searchParams.get('type')
+  
+  console.log('Auth callback received:', { code: !!code, type })
 
   if (code) {
     const cookieStore = cookies()
@@ -43,7 +46,17 @@ export async function GET(request: NextRequest) {
       }
     )
 
-    await supabase.auth.exchangeCodeForSession(code)
+    try {
+      const { data, error } = await supabase.auth.exchangeCodeForSession(code)
+      if (error) {
+        console.error('Error exchanging code for session:', error)
+        return NextResponse.redirect(new URL('/login?error=auth', request.url))
+      }
+      console.log('Successfully exchanged code for session:', { user: !!data.user })
+    } catch (err) {
+      console.error('Exception during code exchange:', err)
+      return NextResponse.redirect(new URL('/login?error=auth', request.url))
+    }
   }
 
   // URL to redirect to after sign in process completes
