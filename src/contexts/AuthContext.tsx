@@ -1,16 +1,12 @@
 'use client'
 
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
-
-// Define a basic User type
-type User = {
-  id: string;
-  email: string;
-} | null;
+import { useRouter } from 'next/navigation'
+import { AuthUser } from '@/lib/auth'
 
 // Define the AuthContext type
 type AuthContextType = {
-  user: User;
+  user: AuthUser | null;
   loading: boolean;
   signOut: () => Promise<void>;
 }
@@ -27,18 +23,24 @@ export const useAuth = () => useContext(AuthContext)
 
 // AuthProvider component
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User>(null)
+  const [user, setUser] = useState<AuthUser | null>(null)
   const [loading, setLoading] = useState(true)
+  const router = useRouter()
 
   useEffect(() => {
-    // Simulate checking for a user
     const checkUser = async () => {
       try {
-        // In a real implementation, this would check for a user session
-        // For now, we'll just set loading to false
-        setLoading(false)
+        const response = await fetch('/api/auth/me')
+        if (response.ok) {
+          const data = await response.json()
+          setUser(data.user)
+        } else {
+          setUser(null)
+        }
       } catch (error) {
         console.error('Error checking user:', error)
+        setUser(null)
+      } finally {
         setLoading(false)
       }
     }
@@ -48,8 +50,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Sign out function
   const signOut = async () => {
-    // In a real implementation, this would sign the user out
-    setUser(null)
+    try {
+      const response = await fetch('/auth/sign-out', {
+        method: 'POST',
+      })
+
+      if (response.ok) {
+        setUser(null)
+        router.push('/login')
+      }
+    } catch (error) {
+      console.error('Error signing out:', error)
+    }
   }
 
   return (

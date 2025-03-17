@@ -1,96 +1,70 @@
-import { createServerClient } from '@supabase/ssr'
-import { NextResponse, type NextRequest } from 'next/server'
+import { NextResponse, type NextRequest } from 'next/server';
 
-// Define protected routes that require authentication
-const protectedRoutes = ['/dashboard', '/settings', '/profile', '/admin']
+// Constants
+const PROTECTED_ROUTES = ['/admin'];
+const PUBLIC_ROUTES = ['/login', '/auth'];
+const SESSION_COOKIE_NAME = 'session';
+
+// Logging utility
+const log = {
+  info: (message: string, data?: any) => {
+    console.log(`ℹ️ [Middleware] ${message}`, data ? data : '');
+  },
+  error: (message: string, error?: any) => {
+    console.error(`❌ [Middleware] ${message}`, error ? error : '');
+  },
+  success: (message: string, data?: any) => {
+    console.log(`✅ [Middleware] ${message}`, data ? data : '');
+  }
+};
 
 export async function middleware(request: NextRequest) {
-  console.log('🔍 Middleware executing for path:', request.nextUrl.pathname)
-
-  let response = NextResponse.next({
-    request,
-  })
-
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll()
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) => {
-            request.cookies.set(name, value)
-            response.cookies.set(name, value, options)
-          })
-        },
-      },
-    }
-  )
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const pathname = request.nextUrl.pathname;
   
-  console.log('👤 Current user state:', user ? 'Authenticated' : 'Not authenticated')
-
-  // If user is not logged in and trying to access a protected route
-  if (!user && request.nextUrl.pathname.startsWith('/admin')) {
-    console.log('🚫 Unauthorized access attempt to admin - redirecting to login')
-    const redirectUrl = new URL('/login', request.url)
-    const redirectResponse = NextResponse.redirect(redirectUrl)
-    
-    // Copy all cookies from the response to the redirect
-    response.cookies.getAll().forEach(cookie => {
-      redirectResponse.cookies.set(cookie.name, cookie.value, {
-        path: cookie.path,
-        domain: cookie.domain,
-        maxAge: cookie.maxAge,
-        secure: cookie.secure,
-        httpOnly: cookie.httpOnly,
-        sameSite: cookie.sameSite,
-      })
-    })
-    
-    return redirectResponse
+  // Log all incoming requests
+  log.info(`Request path: ${pathname}`);
+  
+  // Skip auth check for public routes
+  if (PUBLIC_ROUTES.some(route => pathname.startsWith(route))) {
+    log.info('Public route - skipping auth check');
+    return NextResponse.next();
+  }
+  
+  // Only check auth for protected routes
+  if (!PROTECTED_ROUTES.some(route => pathname.startsWith(route))) {
+    log.info('Non-protected route - skipping auth check');
+    return NextResponse.next();
   }
 
-  // If user is logged in and trying to access login page
-  if (user && request.nextUrl.pathname.startsWith('/login')) {
-    console.log('✅ Authenticated user at login - redirecting to admin')
-    const redirectUrl = new URL('/admin', request.url)
-    const redirectResponse = NextResponse.redirect(redirectUrl)
+  try {
+    // Get session token from cookies
+    const token = request.cookies.get(SESSION_COOKIE_NAME)?.value;
     
-    // Copy all cookies from the response to the redirect
-    response.cookies.getAll().forEach(cookie => {
-      redirectResponse.cookies.set(cookie.name, cookie.value, {
-        path: cookie.path,
-        domain: cookie.domain,
-        maxAge: cookie.maxAge,
-        secure: cookie.secure,
-        httpOnly: cookie.httpOnly,
-        sameSite: cookie.sameSite,
-      })
-    })
-    
-    return redirectResponse
-  }
+    if (!token) {
+      log.error('No session token found');
+      return redirectToLogin(request);
+    }
 
-  console.log('✨ Middleware complete - continuing with request')
-  return response
+    // NOTE: We don't validate the session token in middleware
+    // We'll let the page component handle that to avoid Prisma in Edge
+    log.info('Session token found, continuing to protected route');
+    return NextResponse.next();
+  } catch (error) {
+    log.error('Authentication error', error);
+    return redirectToLogin(request);
+  }
 }
 
-// Configure which paths the middleware should run on
+function redirectToLogin(request: NextRequest) {
+  const url = new URL('/login', request.url);
+  // Add the return URL as a parameter to redirect back after login
+  url.searchParams.set('returnUrl', request.nextUrl.pathname);
+  log.info(`Redirecting to login: ${url.toString()}`);
+  return NextResponse.redirect(url);
+}
+
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * Feel free to modify this pattern to include more paths.
-     */
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/admin/:path*',
   ],
-} 
+}; 

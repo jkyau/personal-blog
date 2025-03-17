@@ -1,12 +1,25 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { FormEvent, useState } from 'react'
 
 export default function LoginForm() {
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
+  const searchParams = useSearchParams()
+  
+  // Get error message from URL if any
+  const errorFromUrl = searchParams.get('error')
+  // Get return URL from URL params if any
+  const returnUrl = searchParams.get('returnUrl') || '/admin'
+
+  // Set error from URL params on first render
+  useState(() => {
+    if (errorFromUrl) {
+      setError(errorFromUrl)
+    }
+  })
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -14,10 +27,12 @@ export default function LoginForm() {
     setIsLoading(true)
 
     const formData = new FormData(event.currentTarget)
-    const email = formData.get('email') as string
-    const password = formData.get('password') as string
+    
+    // Add returnUrl to form data
+    formData.append('returnUrl', returnUrl)
 
     try {
+      console.log('Submitting login form...')
       const response = await fetch('/auth/sign-in', {
         method: 'POST',
         body: formData,
@@ -30,10 +45,10 @@ export default function LoginForm() {
         const data = await response.text()
         const searchParams = new URL(data).searchParams
         const error = searchParams.get('error')
-        setError(error || 'An error occurred during sign in')
+        setError(error || 'An error occurred during login')
       }
     } catch (error) {
-      setError('An error occurred during sign in')
+      setError('An error occurred during login')
     } finally {
       setIsLoading(false)
     }
@@ -56,6 +71,7 @@ export default function LoginForm() {
           name="email"
           required
           disabled={isLoading}
+          defaultValue="jason@jkyau.com"
           className="w-full px-4 py-[10px] text-[15px] font-sans bg-white border border-[#E6E1D7] rounded-lg focus:outline-none focus:border-[#1A1919] transition-colors"
         />
       </div>
@@ -69,6 +85,7 @@ export default function LoginForm() {
           name="password"
           required
           disabled={isLoading}
+          defaultValue="admin123"
           className="w-full px-4 py-[10px] text-[15px] font-sans bg-white border border-[#E6E1D7] rounded-lg focus:outline-none focus:border-[#1A1919] transition-colors"
         />
       </div>

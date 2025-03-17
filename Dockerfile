@@ -1,7 +1,7 @@
-FROM node:18-alpine
+FROM node:18-alpine AS base
 
-# Install dependencies
-RUN apk add --no-cache wget curl
+# Install system dependencies
+RUN apk add --no-cache wget curl openssl openssl-dev
 
 # Set working directory
 WORKDIR /app
@@ -9,8 +9,10 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
+FROM base AS development
 # Install dependencies
 RUN npm install
+RUN npm install bcryptjs @types/bcryptjs
 
 # Copy all files
 COPY . .

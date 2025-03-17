@@ -1,14 +1,17 @@
 import Link from 'next/link'
+import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
+import { getUserFromSession } from '@/lib/auth'
 import LoginForm from '@/components/LoginForm'
 
 export default async function Login() {
-  const supabase = await createClient()
-
-  const { data: { user } } = await supabase.auth.getUser()
-  if (user) {
-    redirect('/admin')
+  // Check if user is already logged in
+  const sessionToken = cookies().get('session')?.value
+  if (sessionToken) {
+    const user = await getUserFromSession(sessionToken)
+    if (user) {
+      redirect('/admin')
+    }
   }
 
   return (

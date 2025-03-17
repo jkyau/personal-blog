@@ -1,64 +1,63 @@
-import { createServerClient } from '@supabase/ssr'
-import { cookies } from 'next/headers'
-import { NextResponse } from 'next/server'
+import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+import { verifyPassword, createSession, setSessionCookie } from '@/lib/auth';
 
 export async function POST(request: Request) {
-  const formData = await request.formData()
-  const email = formData.get('email') as string
-  const password = formData.get('password') as string
-  const origin = request.headers.get('origin') || request.url
-  const cookieStore = cookies()
+  try {
+    const formData = await request.formData();
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+    const origin = request.headers.get('origin') || request.url;
+    const returnUrl = formData.get('returnUrl') as string || '/admin';
 
-  console.log('📝 Sign-in attempt for email:', email)
+    // Log attempt
+    console.log(`📝 Login attempt for: ${email}`);
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll()
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) => {
-            cookieStore.set(name, value, options)
-          })
-        },
-      },
+    if (!email || !password) {
+      console.error('❌ Login error: Missing email or password');
+      return redirectToLogin('Please provide both email and password', origin);
     }
-  )
 
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  })
+    // Find user by email
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
 
-  if (error) {
-    console.error('❌ Sign-in error:', error.message)
-    const url = new URL('/login', origin)
-    url.searchParams.set('error', error.message)
-    return NextResponse.redirect(url, {
+    if (!user) {
+      console.error('❌ Login error: User not found');
+      return redirectToLogin('Invalid login credentials', origin);
+    }
+
+    // Verify password
+    const isValidPassword = verifyPassword(password, user.password);
+    if (!isValidPassword) {
+      console.error('❌ Login error: Invalid password');
+      return redirectToLogin('Invalid login credentials', origin);
+    }
+
+    // Create session
+    const token = await createSession(user.id);
+    console.log('✅ Login successful:', { userId: user.id });
+
+    // Create response with redirect
+    const redirectUrl = new URL(returnUrl, origin);
+    const response = NextResponse.redirect(redirectUrl, {
       status: 303,
-    })
+    });
+
+    // Set session cookie
+    setSessionCookie(response, token);
+    console.log('🔑 Session cookie set');
+
+    return response;
+  } catch (error) {
+    console.error('🔥 Unexpected error during login:', error);
+    return redirectToLogin('An unexpected error occurred', request.url);
   }
+}
 
-  console.log('✅ User authenticated successfully:', { userId: data.user.id })
-  
-  // Create the response with the redirect
-  const response = NextResponse.redirect(new URL('/admin', origin), {
-    status: 303,
-  })
-
-  // Get the cookies from the store and set them in the response
-  const authCookies = cookieStore.getAll()
-  authCookies.forEach(cookie => {
-    response.cookies.set(cookie.name, cookie.value, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/'
-    })
-  })
-
-  return response
+function redirectToLogin(error: string, origin: string) {
+  const url = new URL('/login', origin);
+  url.searchParams.set('error', error);
+  return NextResponse.redirect(url, { status: 303 });
 } 

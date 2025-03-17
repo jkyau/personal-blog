@@ -1,0 +1,112 @@
+# Software Requirements Specification Document
+
+## System Overview
+- **Purpose:** Personal blog with secure admin interface
+- **Core Features:**
+  - Public blog viewing
+  - Secure admin authentication
+  - Content management
+  - Markdown editing
+
+## Technical Stack
+- **Frontend:**
+  - Next.js 14 with App Router
+  - React 18
+  - Tailwind CSS
+  - Shadcn UI components
+- **Backend:**
+  - Next.js API Routes
+  - PostgreSQL with Prisma ORM
+  - Session-based authentication
+- **Infrastructure:**
+  - Docker for development
+  - Vercel for deployment
+
+## Authentication System
+- **Implementation:**
+  - Custom session-based auth with secure token generation
+  - Bcrypt password hashing (10 rounds)
+  - HttpOnly cookies with proper security flags
+- **Security Features:**
+  - Automatic session expiration (30 days)
+  - Secure session storage in PostgreSQL
+  - Comprehensive security logging
+  - CSRF protection via SameSite cookie policy
+
+## Database Schema
+- **Users:**
+  ```prisma
+  model User {
+    id        String    @id @default(cuid())
+    email     String    @unique
+    password  String    // Bcrypt hashed
+    isAdmin   Boolean   @default(false)
+    sessions  Session[]
+    posts     Post[]
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+  }
+  ```
+- **Sessions:**
+  ```prisma
+  model Session {
+    id        String   @id @default(cuid())
+    token     String   @unique
+    userId    String
+    user      User     @relation(fields: [userId], references: [id])
+    expiresAt DateTime
+    createdAt DateTime @default(now())
+  }
+  ```
+- **Posts:**
+  ```prisma
+  model Post {
+    id        String   @id @default(cuid())
+    title     String
+    content   String   @db.Text
+    published Boolean  @default(false)
+    authorId  String
+    author    User     @relation(fields: [authorId], references: [id])
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+  }
+  ```
+
+## API Routes
+- **Auth Routes:**
+  - POST /api/auth/login
+  - POST /api/auth/logout
+  - GET /api/auth/me
+- **Content Routes:**
+  - GET /api/posts
+  - POST /api/posts
+  - PUT /api/posts/[id]
+  - DELETE /api/posts/[id]
+
+## Protected Routes
+- **Admin Routes:**
+  - /admin/* (requires authentication)
+- **Public Routes:**
+  - / (home)
+  - /blog/[id]
+  - /login
+
+## Error Handling
+- **Authentication Errors:**
+  - Invalid credentials
+  - Session expiration
+  - Unauthorized access
+- **Logging:**
+  - Auth events
+  - Error tracking
+  - Security incidents
+
+## Development Setup
+- **Local Environment:**
+  - Docker Compose for PostgreSQL
+  - Next.js development server
+  - Hot reloading enabled
+- **Environment Variables:**
+  - DATABASE_URL
+  - NODE_ENV
+  - SESSION_SECRET 
